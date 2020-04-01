@@ -1,0 +1,7 @@
+---
+mysql_root_password: 'sam1qaz2wsx'
+app_user: 'sam'
+http_host: 'sammy_host'
+http_conf: 'sammy_host.conf'
+http_port: '80'
+disable_default: true

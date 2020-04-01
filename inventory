@@ -1,0 +1,11 @@
+[all:vars]
+ansible_user='sam' 
+ansible_become='yes'
+ansible_become_pass='{{ my_user_password }}'
+ansible_become_method='sudo'
+
+[servers]
+server1 ansible_host=192.168.0.163 
+
+[servers:vars]
+ansible_python_interpreter='/usr/bin/python3'
