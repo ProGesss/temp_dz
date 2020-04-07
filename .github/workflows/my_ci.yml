@@ -1,18 +1,69 @@
 #_______________________________________________________________
-# Tut mogla bit vasha reklama! 
+# Zdes mogla bit vasha reklama!! 
+#     d-_-b
+#     (.)(.)
 #_______________________________________________________________
 
-
-name: my_gh_basics_actions
+name: my_ansible_play
 
 on:
   push:
     branches: [ master ]
-
 jobs:
-  my_test_job:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Print Hello Message
-        run: echo Hello, world! 
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible==2.9.2 requests
+    - name: set ansible config secrets
+      env:
+        ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+        AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+      run: |
+        echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
+        mkdir .ssh
+        echo "$AWS_SSH_KEY" > .ssh/id_ubuntu_18_04
+        chmod 600 .ssh/id_ubuntu_18_04
+    - name: run exporters playbook
+      env:
+        AWS_API_KEY: ${{ secrets.AWS_API_KEY }}
+      run: |
+        ansible-playbook -i inventory play.yml
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+#    - name: Run playbook
+#  uses: dawidd6/action-ansible-playbook@v1
+#  with:
+#    playbook: deploy.yml
+#    directory: ./
+#    key: ${{secrets.SSH_PRIVATE_KEY}}
+#    inventory: |
+#      [all]
+#      example.com
+
+#      [group1]
+#      example.com
+#    vault_password: ${{secrets.VAULT_PASSWORD}}
+#    options: |
+#      --limit group1
+#      --extra-vars hello=there
+#      --verbose
