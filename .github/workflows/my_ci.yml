@@ -4,7 +4,7 @@
 #     (.)(.)
 #_______________________________________________________________
 
-name: my_ansible_deplay
+name: my_ansible_check
   
 on:
   push:
@@ -28,8 +28,8 @@ jobs:
          
     - name: Lint playbook
       run: |
-         ansible-playbook site.yml --syntax-check
-         ansible-lint site.yml
+         ansible-playbook playbook.yml --syntax-check
+         ansible-lint playbook.yml.yml
     
     
     
