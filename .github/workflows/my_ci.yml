@@ -20,7 +20,7 @@ jobs:
       with:
         python-version: 3.7
            
-    - name: Install python pip, ansible-lint
+    - name: Install python pip, ansible, ansible-lint
       run: |
          python -m pip install --upgrade pip
          pip install ansible==2.9.2 requests
