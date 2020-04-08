@@ -4,8 +4,8 @@
 #     (.)(.)
 #_______________________________________________________________
 
-name: my_ansible_play
-
+name: my_ansible_deplay
+  
 on:
   push:
     branches: [ master ]
@@ -19,24 +19,16 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Install dependencies
+           
+    - name: Install python pip, ansible-lint
       run: |
-        python -m pip install --upgrade pip
-        pip install ansible==2.9.2 requests
-    - name: set ansible config secrets
-      env:
-        ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-        AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+         python -m pip install --upgrade pip
+         pip install ansible ansible-lint
+         
+    - name: Lint playbook
       run: |
-        echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
-        mkdir .ssh
-        echo "$AWS_SSH_KEY" > .ssh/id_ubuntu_18_04
-        chmod 600 .ssh/id_ubuntu_18_04
-    - name: run exporters playbook
-      env:
-        AWS_API_KEY: ${{ secrets.AWS_API_KEY }}
-      run: |
-        ansible-playbook -i inventory play.yml
+         ansible-playbook site.yml --syntax-check
+         ansible-lint site.yml
     
     
     
@@ -46,24 +38,24 @@ jobs:
     
     
     
+   
+   
+   
+   
+   
+ #    env:
+ #      ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+ #      AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+ #    run: |
+ #      echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
+ #      mkdir .ssh
+ #      echo "$AWS_SSH_KEY" > .ssh/id_ubuntu_18_04
+ #      chmod 600 .ssh/id_ubuntu_18_04
+ #  - name: run exporters playbook
+ #    env:
+ #      AWS_API_KEY: ${{ secrets.AWS_API_KEY }}
+ #    run: |
+ #      ansible-playbook -i inventory play.yml
     
     
     
-    
-#    - name: Run playbook
-#  uses: dawidd6/action-ansible-playbook@v1
-#  with:
-#    playbook: deploy.yml
-#    directory: ./
-#    key: ${{secrets.SSH_PRIVATE_KEY}}
-#    inventory: |
-#      [all]
-#      example.com
-
-#      [group1]
-#      example.com
-#    vault_password: ${{secrets.VAULT_PASSWORD}}
-#    options: |
-#      --limit group1
-#      --extra-vars hello=there
-#      --verbose
